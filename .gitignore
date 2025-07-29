@@ -29,7 +29,6 @@ pairgame.client/.next/
 pairgame.client/.turbo/
 pairgame.client/.cache/
 pairgame.client/dist/
-pairgame.client/*
 
 # Logs
 *.log
