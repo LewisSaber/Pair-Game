@@ -1,0 +1,54 @@
+# ASP.NET Core
+PairGame.Server/bin/
+PairGame.Server/obj/
+PairGame.Server/*.user
+PairGame.Server/*.suo
+PairGame.Server/*.userosscache
+PairGame.Server/*.sln.docstates
+
+# Visual Studio
+.vs/
+*.vc.db
+*.vscode/
+
+# Build results
+[Dd]ebug*/
+[Rr]elease*/
+x64/
+x86/
+build/
+BuildOutput/
+*.dll
+*.exe
+*.log
+
+# Node
+pairgame.client/node_modules/
+pairgame.client/build/
+pairgame.client/.next/
+pairgame.client/.turbo/
+pairgame.client/.cache/
+pairgame.client/dist/
+pairgame.client/*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env*
+.env.local
+
+# Dependency directories
+packages/
+bower_components/
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Others
+*.ncrunch*
+*.orig

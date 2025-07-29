@@ -1,0 +1,6 @@
+@PairGame.Server_HostAddress = http://localhost:5217
+
+GET {{PairGame.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

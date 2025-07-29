@@ -1,0 +1,16 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "pairgame.client\\pairgame.client.esproj",
+        "Action": "Start",
+        "DebugTarget": "localhost (Chrome)"
+      },
+      {
+        "Path": "PairGame.Server\\PairGame.Server.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
