@@ -1,4 +1,11 @@
 {
+  "compilerOptions": {
+    "jsx": "react-jsx", 
+    "types": [ "jest", "node" ],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [ "src" ],
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },

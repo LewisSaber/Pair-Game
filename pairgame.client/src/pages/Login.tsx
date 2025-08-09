@@ -30,7 +30,7 @@ function Login() {
             }
 
             const result = await response.json();
-            localStorage.setItem('token', result.token); // save JWT
+            localStorage.setItem('token', result.token);
             console.log('Logged in successfully:', result);
             navigate("/")
 

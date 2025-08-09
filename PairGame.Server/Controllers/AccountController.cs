@@ -77,11 +77,8 @@ public class AccountController : ControllerBase
     private string GenerateJwtToken(ApplicationUser user)
     {
         var claims = new[]
-        {
-          //  new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+        {         
             new Claim(ClaimTypes.Name, user.UserName),
-          //  new Claim(JwtRegisteredClaimNames.Jti, System.Guid.NewGuid().ToString()),
-          //  new Claim(ClaimTypes.NameIdentifier, user.Id)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

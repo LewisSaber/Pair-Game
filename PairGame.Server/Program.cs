@@ -7,6 +7,7 @@ using PairGame.Server;
 using PairGame.Server.models;
 using PairGame.Server.Repositories.Implementation;
 using PairGame.Server.Repositories.Interface;
+using PairGame.Server.Services;
 using System.Security.Claims;
 using System.Text;
 
@@ -20,7 +21,6 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
-// Add services to the container.
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -60,7 +60,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddTransient<IIconRepository,IconRepository>();
-builder.Services.AddTransient<IconService>();
+builder.Services.AddTransient<IIconService,IconService>();
 
 
 
@@ -81,7 +81,7 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/uploads"
 });
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

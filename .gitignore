@@ -6,6 +6,15 @@ PairGame.Server/*.suo
 PairGame.Server/*.userosscache
 PairGame.Server/*.sln.docstates
 
+# Testing
+
+PairGame.tests/bin/
+PairGame.tests/obj/
+PairGame.tests/*.user
+PairGame.tests/*.suo
+PairGame.tests/*.userosscache
+PairGame.tests/*.sln.docstates
+
 # Visual Studio
 .vs/
 *.vc.db

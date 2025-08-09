@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using PairGame.Server.models;
+using PairGame.Server.Services;
 using System.Security.Claims;
 
 namespace PairGame.Server.Controllers
@@ -11,68 +11,53 @@ namespace PairGame.Server.Controllers
     [Route("api/[controller]")]
     public class IconController : ControllerBase
     {
-        private readonly IconService _iconService;
+        private readonly IIconService _iconService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public IconController(UserManager<ApplicationUser> userManager ,IconService iconService)
+        public IconController(UserManager<ApplicationUser> userManager, IIconService iconService)
         {
             _userManager = userManager;
             _iconService = iconService;
+        }
+
+        private string? GetCurrentUserName()
+        {
+            return User?.Identity?.IsAuthenticated == true ? User.Identity?.Name : null;
         }
 
         [HttpPost("create")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> CreateIconSet([FromBody] string name)
         {
-            var username = User.Identity?.Name;
-
-            if (username == null)
-                return Unauthorized();
-
+            var username = GetCurrentUserName();
+            if (username == null) return Unauthorized();
             var user = await _userManager.FindByNameAsync(username);
-
-            if (user == null)
-                return NotFound();
-            var userId = user.Id;
-            var iconSet = await _iconService.CreateEmptyIconSetAsync(name, userId);
+            if (user == null) return NotFound();
+            var iconSet = await _iconService.CreateEmptyIconSetAsync(name, user.Id);
             return Ok(iconSet);
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("rename")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> RenameIconSet([FromBody] RenameRequestModel request)
         {
-            var username = User.Identity?.Name;
-
-            if (username == null)
-                return Unauthorized();
-
+            var username = GetCurrentUserName();
+            if (username == null) return Unauthorized();
             var user = await _userManager.FindByNameAsync(username);
-
-            if (user == null)
-                return NotFound();
-            var userId = user.Id;
-
-            await _iconService.RenameIconSetAsync(request.Id, request.NewName, userId);
+            if (user == null) return NotFound();
+            await _iconService.RenameIconSetAsync(request.Id, request.NewName, user.Id);
             return NoContent();
         }
 
-
-        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("allUser")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetAllUserIconSets()
         {
-            var username = User.Identity?.Name;
-
-            if (username == null)
-                return Unauthorized();
-
+            var username = GetCurrentUserName();
+            if (username == null) return Unauthorized();
             var user = await _userManager.FindByNameAsync(username);
-
-            if (user == null)
-                return NotFound();
-            var userId = user.Id;
-            var iconSets = await _iconService.GetByUserIdAsync(userId);
+            if (user == null) return NotFound();
+            var iconSets = await _iconService.GetByUserIdAsync(user.Id);
             return Ok(iconSets);
         }
 
@@ -84,45 +69,30 @@ namespace PairGame.Server.Controllers
             return Ok(iconSet);
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("addImage")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> AddImage(AddRequestModel request)
         {
-            var username = User.Identity?.Name;
-
-            if (username == null)
-                return Unauthorized();
-
+            var username = GetCurrentUserName();
+            if (username == null) return Unauthorized();
             var user = await _userManager.FindByNameAsync(username);
-
-            if (user == null)
-                return NotFound();
-            var userId = user.Id;
+            if (user == null) return NotFound();
             var uploadsRoot = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
-
-            if (request.Image == null || request.Image.Length == 0)
-                return BadRequest("No file uploaded.");
-
-            var newImage = await _iconService.AddImageAsync(request.IconSetId, request.Image , userId, uploadsRoot);
+            if (request.Image == null || request.Image.Length == 0) return BadRequest("No file uploaded.");
+            var newImage = await _iconService.AddImageAsync(request.IconSetId, request.Image, user.Id, uploadsRoot);
             if (newImage != null) return Ok(newImage);
             return Unauthorized();
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpDelete("removeImage")]
-        public async Task<IActionResult> RemoveImage([FromBody]  RemoveRequestModel request)
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> RemoveImage([FromBody] RemoveRequestModel request)
         {
-            var username = User.Identity?.Name;
-
-            if (username == null)
-                return Unauthorized();
-
+            var username = GetCurrentUserName();
+            if (username == null) return Unauthorized();
             var user = await _userManager.FindByNameAsync(username);
-
-            if (user == null)
-                return NotFound();
-            var userId = user.Id;
-            await _iconService.RemoveImageAsync(request.IconSetId, request.ImageId ,userId);
+            if (user == null) return NotFound();
+            await _iconService.RemoveImageAsync(request.IconSetId, request.ImageId, user.Id);
             return NoContent();
         }
 
@@ -130,16 +100,10 @@ namespace PairGame.Server.Controllers
         public async Task<IActionResult> GetAllIconSets()
         {
             var iconSets = await _iconService.GetAllIconSetsAsync();
-           
             return Ok(iconSets);
         }
-
     }
-
-
 }
-
-
 
 public class RenameRequestModel
 {
